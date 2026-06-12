@@ -1,0 +1,16 @@
+# Python tooling — not needed for the live site
+tools/.venv/
+tools/ffmpeg-8.1.1-essentials_build/
+tools/ffmpeg.zip
+tools/targeted_run.log
+
+# Higgsfield video frames (generated locally, not committed)
+frames/
+
+# Local launcher
+Launch Demo.bat
+
+# OS / editor junk
+.DS_Store
+Thumbs.db
+*.swp

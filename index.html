@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DHH — Desi Hip Hop Archive</title>
+  <meta name="description" content="An immersive spherical gallery of Desi Hip Hop — every album, every artist, one sphere." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@400;500;600;700&family=Tiro+Devanagari+Hindi&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ── preloader ─────────────────────────────────────────── -->
+  <div id="loader">
+    <div class="loader-mark">डीएचएच</div>
+    <div class="loader-count"><span id="loader-pct">0</span>%</div>
+    <div class="loader-bar"><i id="loader-fill"></i></div>
+  </div>
+
+  <!-- ── header ────────────────────────────────────────────── -->
+  <header class="site-head">
+    <a class="brand" href="#top">DHH<i>•</i></a>
+    <button id="sound-toggle" class="head-pill mono">SOUND [OFF]</button>
+    <p class="head-blurb mono">DHH IS A LIVING ARCHIVE OF<br>DESI HIP HOP — EVERY ALBUM,<br>EVERY VOICE, ONE SPHERE.</p>
+    <div class="head-clocks mono">
+      <span>◐ MUMBAI, IN &nbsp;<b id="clock-in">--:--</b> GMT+5:30</span>
+      <span>◑ <span id="local-city">LOCAL</span> &nbsp;<b id="clock-local">--:--</b></span>
+    </div>
+    <a class="cta-pill" href="#contact">Let's Talk</a>
+  </header>
+
+  <!-- ── hero: the sphere ──────────────────────────────────── -->
+  <section id="hero" data-stage>
+    <div class="stage">
+      <canvas id="sphere"></canvas>
+      <div id="tile-tip" class="mono"></div>
+
+      <div class="hero-copy">
+        <p class="copy-line mono" data-win="-0.06,0.16" style="margin-top:-26vh">YOU ARE STANDING INSIDE THE ARCHIVE</p>
+        <h1 class="copy-line" data-win="-0.06,0.30">DESI<br>HIP HOP</h1>
+        <p class="copy-line big" data-win="0.36,0.54">FROM GULLY TO<br>GLOBAL —</p>
+        <p class="copy-line big" data-win="0.58,0.76">EVERY ALBUM IS<br>A COORDINATE.</p>
+        <p class="copy-line mono" data-win="0.82,0.97">DRAG TO LOOK AROUND · CLICK A COVER</p>
+      </div>
+
+      <div class="hero-foot">
+        <nav class="foot-nav">
+          <a href="#artists">Artists</a>
+          <a href="#timeline">Timeline</a>
+          <a href="#contact">Contact</a>
+        </nav>
+        <div class="scroll-hint mono">SCROLL ↓</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── scrub: cinematic clip 1 (auto-skipped if no frames) ── -->
+  <section id="scrub-orbit" class="scrub-section" data-scrub hidden>
+    <div class="stage">
+      <canvas class="scrub-canvas"></canvas>
+      <div class="scrub-copy">
+        <p class="copy-line big" data-win="0.1,0.45">THE SPHERE<br>NEVER STOPS</p>
+        <p class="copy-line big" data-win="0.55,0.9">TURNING.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── manifesto ─────────────────────────────────────────── -->
+  <section id="manifesto">
+    <p class="kicker mono" data-reveal>001 — THE MOVEMENT</p>
+    <h2 class="statement" data-reveal>
+      What started in the gullies of <em>Mumbai</em> and the basements of
+      <em>Delhi</em> is now the loudest youth culture on the subcontinent —
+      <em>five hundred million</em> streams at a time.
+    </h2>
+    <div class="manifesto-row" data-reveal>
+      <p>Hindi. Punjabi. Urdu. Tamil. Malayalam. Marathi. Haryanvi. The language changes every hundred kilometres — the drums don't. DHH catalogues the records that built the culture: from Bayaan to Big Dawgs, Kohinoor to Lunch Break.</p>
+      <p>This is not a playlist. It's a planetarium. Every cover you saw in the sphere is a real release that moved the culture forward — mapped, tagged and orbiting forever.</p>
+    </div>
+  </section>
+
+  <!-- ── artists ───────────────────────────────────────────── -->
+  <section id="artists">
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track mono" id="marquee-track"></div>
+    </div>
+    <p class="kicker mono" data-reveal>002 — THE VOICES</p>
+    <div class="artist-grid" id="artist-grid"></div>
+  </section>
+
+  <!-- ── scrub: cinematic clip 2 (auto-skipped if no frames) ── -->
+  <section id="scrub-reveal" class="scrub-section" data-scrub hidden>
+    <div class="stage">
+      <canvas class="scrub-canvas"></canvas>
+      <div class="scrub-copy">
+        <p class="copy-line big" data-win="0.15,0.5">EVERY FRAME</p>
+        <p class="copy-line big" data-win="0.55,0.9">A RECORD.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── timeline ──────────────────────────────────────────── -->
+  <section id="timeline">
+    <p class="kicker mono" data-reveal>003 — THE TIMELINE</p>
+    <div id="timeline-rows"></div>
+  </section>
+
+  <!-- ── stats ─────────────────────────────────────────────── -->
+  <section id="stats">
+    <div class="stat" data-reveal><b data-count="44">0</b><span class="mono">ALBUMS IN ORBIT</span></div>
+    <div class="stat" data-reveal><b data-count="12">0</b><span class="mono">ARTISTS IN ORBIT</span></div>
+    <div class="stat" data-reveal><b data-count="9">0</b><span class="mono">LANGUAGES RHYMED IN</span></div>
+    <div class="stat" data-reveal><b data-count="2026">0</b><span class="mono">STILL COUNTING</span></div>
+  </section>
+
+  <!-- ── contact / footer ──────────────────────────────────── -->
+  <section id="contact">
+    <p class="kicker mono" data-reveal>004 — TRANSMIT</p>
+    <h2 class="contact-line" data-reveal>Put your city<br>on the sphere.</h2>
+    <a class="cta-big" href="mailto:archive@dhh.world" data-reveal>archive@dhh.world ↗</a>
+    <footer>
+      <span class="mono">© 2026 DHH ARCHIVE</span>
+      <span class="mono">BUILT INSIDE THE SPHERE</span>
+      <a class="mono" href="#top">BACK TO TOP ↑</a>
+    </footer>
+  </section>
+
+  <!-- ── album overlay ─────────────────────────────────────── -->
+  <div id="album-overlay" hidden>
+    <button id="overlay-close" class="mono">CLOSE ✕</button>
+    <div class="overlay-inner">
+      <img id="overlay-art" alt="" width="600" height="600" />
+      <div class="overlay-meta">
+        <p class="mono" id="ov-tags"></p>
+        <h3 id="ov-title"></h3>
+        <p class="mono" id="ov-artist"></p>
+        <p class="ov-desc" id="ov-desc"></p>
+        <div class="ov-actions">
+          <button id="ov-play" class="ov-btn" hidden>▶ PLAY PREVIEW</button>
+          <a id="ov-apple" class="ov-btn ghost" target="_blank" rel="noopener" hidden>APPLE MUSIC ↗</a>
+          <a id="ov-spotify" class="ov-btn ghost" target="_blank" rel="noopener">SPOTIFY ↗</a>
+        </div>
+        <div class="eq paused" id="ov-eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+        <p class="mono" id="ov-track"></p>
+      </div>
+    </div>
+  </div>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"
+    }
+  }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
