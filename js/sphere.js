@@ -67,6 +67,52 @@ function loadImage(src) {
   });
 }
 
+// Order album indices across `total` tiles so neighbouring tiles never
+// share an artist (when possible) and an artist's own tracks are spread
+// far apart — keeps the sphere wall from feeling like repeated blocks.
+function scatterPlacement(total, albums) {
+  const groups = new Map();              // artist -> [album indices]
+  albums.forEach((a, i) => {
+    if (!groups.has(a.artist)) groups.set(a.artist, []);
+    groups.get(a.artist).push(i);
+  });
+  const keys = [...groups.keys()];
+
+  // tiles per artist, proportional to how many albums they have
+  const quota = new Map();
+  let assigned = 0;
+  keys.forEach((k) => {
+    const q = Math.floor((total * groups.get(k).length) / albums.length);
+    quota.set(k, q); assigned += q;
+  });
+  const bySize = keys.slice().sort((a, b) => groups.get(b).length - groups.get(a).length);
+  for (let i = 0, left = total - assigned; left > 0; i = (i + 1) % bySize.length, left--) {
+    quota.set(bySize[i], quota.get(bySize[i]) + 1);
+  }
+
+  // greedily emit: each step take the artist (≠ previous) with the most
+  // remaining quota, cycling through that artist's own albums in turn
+  const ptr = new Map(keys.map((k) => [k, 0]));
+  const out = [];
+  let prev = null;
+  for (let n = 0; n < total; n++) {
+    let pick = null, best = -1;
+    for (const k of keys) {
+      const q = quota.get(k);
+      if (q <= 0 || k === prev) continue;
+      if (q > best) { best = q; pick = k; }
+    }
+    if (pick === null) pick = keys.find((k) => quota.get(k) > 0); // only prev left
+    const own = groups.get(pick);
+    const p = ptr.get(pick);
+    out.push(own[p % own.length]);
+    ptr.set(pick, p + 1);
+    quota.set(pick, quota.get(pick) - 1);
+    prev = pick;
+  }
+  return out;
+}
+
 // ── gallery class ──────────────────────────────────────────────────
 export class SphereGallery {
   constructor(canvas, { onSelect, onProgress } = {}) {
@@ -111,13 +157,23 @@ export class SphereGallery {
       })
     );
 
+    // tile count per row (same lat/cols formula used for placement below)
+    const rowCols = [];
+    let totalTiles = 0;
+    for (let row = 0; row < ROWS; row++) {
+      const lat = (-0.5 + row / (ROWS - 1)) * 2.1;
+      const c = Math.max(6, Math.round(COLS * Math.cos(lat)));
+      rowCols.push(c); totalTiles += c;
+    }
+    const placement = scatterPlacement(totalTiles, REAL_ALBUMS);
+
     const geo = new THREE.PlaneGeometry(1, (TILE_PX + CAPTION) / TILE_PX);
     let idx = 0;
     for (let row = 0; row < ROWS; row++) {
       const lat = (-0.5 + row / (ROWS - 1)) * 2.1;
-      const cols = Math.max(6, Math.round(COLS * Math.cos(lat)));
+      const cols = rowCols[row];
       for (let col = 0; col < cols; col++) {
-        const albumIdx = idx % REAL_ALBUMS.length;
+        const albumIdx = placement[idx];
         const album = REAL_ALBUMS[albumIdx];
         idx++;
         const tex = new THREE.CanvasTexture(composeTile(album, imgs[albumIdx]));
